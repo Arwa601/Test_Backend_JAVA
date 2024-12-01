@@ -3,8 +3,8 @@ services:
     image: my_java17_app
     container_name: my_java_app
     build:
-      context: ..
-      dockerfile: Booking_Form_Backend-main\Dockerfile
+      context: .
+      dockerfile: ./Dockerfile
     ports:
       - "80:80"
     volumes:
