@@ -35,7 +35,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 sh 'mvn clean package -DskipTests'
-                sh 'docker compose build app dbmysql'
+                sh 'docker compose build app dbmariadb'
             }
         }
 
@@ -57,10 +57,10 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
                     }
-                    sh 'docker tag my_java17_app:latest arwa409/my_java17_app:latest'
-                    sh 'docker tag mysql:latest arwa409/mysql:latest'
-                    sh 'docker push arwa409/my_java17_app:latest'
-                    sh 'docker push arwa409/mysql:latest'
+                    sh 'docker tag my_java17_app:latest arwa409/MyJava17_app:latest'
+                    sh 'docker tag mariadb:10.4.32 arwa409/mariadb:10.4.32'
+                    sh 'docker push arwa409/MyJava17_app:latest'
+                    sh 'docker push arwa409/mariadb:10.4.32'
                     sh 'docker logout'
                 }
             }
