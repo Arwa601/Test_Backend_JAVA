@@ -24,13 +24,21 @@ pipeline {
         }
 
         stage('Scan and Build Jar File') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE'){
-                withSonarQubeEnv(installationName: 'Production sonarQubeScanner', credentialsId: 'SonarQubeToken') {
-                    sh 'mvn clean package sonar:sonar'
-                }
-            }}
-        }
+                    steps {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            withSonarQubeEnv(installationName: 'Production sonarQubeScanner', credentialsId: 'SonarQubeToken') {
+                                sh """
+                                mvn clean verify sonar:sonar \
+                                  -Dsonar.projectKey=BookingForm \
+                                  -Dsonar.projectName='BookingForm' \
+                                  -Dsonar.host.url=http://localhost:9000 \
+                                  -Dsonar.token=sqp_8d4e63c449f307c714b619584cd7452fab0c6d5c
+                                """
+                            }
+                        }
+                    }
+         }
+
 
         stage('Build Docker Images') {
             steps {
